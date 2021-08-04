@@ -4,8 +4,8 @@
 
 ## 版本安裝及說明文件引導
 
-1. 首次安裝可依照Wiki中的![連線安裝手冊](https://github.com/secbuzzer/DetectionEdge/wiki/SecBuzzer-ESM%E9%80%A3%E7%B7%9A%E5%AE%89%E8%A3%9D%E6%89%8B%E5%86%8A)步驟進行，若部屬環境並無對外網路連線，可另外參照![離線安裝手冊](https://github.com/secbuzzer/DetectionEdge/wiki/SecBuzzer-ESM%E9%9B%A2%E7%B7%9A%E5%AE%89%E8%A3%9D%E6%89%8B%E5%86%8A)
-2. 若曾經有安裝過想要移除或重新安裝可參照Wiki中的![重新安裝手冊](https://github.com/secbuzzer/DetectionEdge/wiki/SecBuzzer-ESM%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%9D%E6%89%8B%E5%86%8A)
+1. 首次安裝可依照Wiki中的[連線安裝手冊](https://github.com/secbuzzer/DetectionEdge/wiki/SecBuzzer-ESM%E9%80%A3%E7%B7%9A%E5%AE%89%E8%A3%9D%E6%89%8B%E5%86%8A)步驟進行，若部屬環境並無對外網路連線，可另外參照[離線安裝手冊](https://github.com/secbuzzer/DetectionEdge/wiki/SecBuzzer-ESM%E9%9B%A2%E7%B7%9A%E5%AE%89%E8%A3%9D%E6%89%8B%E5%86%8A)
+2. 若曾經有安裝過想要移除或重新安裝可參照Wiki中的[重新安裝手冊](https://github.com/secbuzzer/DetectionEdge/wiki/SecBuzzer-ESM%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%9D%E6%89%8B%E5%86%8A)
 3. 版本更新教學(文件待補)
 4. DTM擴充功能安裝教學(文件待補)
 5. 輕量化版本部屬教學(文件待補)

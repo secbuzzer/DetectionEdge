@@ -9,6 +9,7 @@
 3. 版本更新教學(開發中)
 4. DTM擴充功能安裝教學(開發中)
 5. 輕量化版本部屬教學(開發中)
+6. 本產品有提供地端資料視覺化的開源插件，其詳細設定教學請參考[Grafana設定教學](https://github.com/secbuzzer/DetectionEdge/wiki/Granfana%E6%8F%92%E4%BB%B6%E8%A8%AD%E5%AE%9A%E6%95%99%E5%AD%B8)
 
 ## 開發工具使用一覽
 

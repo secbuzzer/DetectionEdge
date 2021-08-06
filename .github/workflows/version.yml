@@ -32,8 +32,6 @@ jobs:
       - name: Commit report
         if: ${{ success() }}
         run: |
-          git config --global user.name 'Robot-Version'
-          git config --global user.email 'leonchu@iii.org.tw'
           git add SecBuzzerESM/.version
           git commit -am "${{ steps.tag_version.outputs.new_tag }} - Automated report"
           git tag -a dev-${{ steps.tag_version.outputs.new_tag }} -m ${{ steps.tag_version.outputs.new_tag }}

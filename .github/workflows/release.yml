@@ -7,7 +7,7 @@ on:
 
 jobs:
   report:
-    if: ${{ github.ref == 'refs/heads/master' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: [self-hosted, Linux, X64, dev]
     steps:
       - uses: AutoModality/action-clean@v1

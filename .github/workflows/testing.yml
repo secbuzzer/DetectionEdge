@@ -10,22 +10,22 @@ jobs:
     name: Build ESM Test
     runs-on: [self-hosted, Linux, X64, dev]
     steps:
-    - uses: AutoModality/action-clean@v1
-    - uses: actions/checkout@v2
+      - uses: AutoModality/action-clean@v1
+      - uses: actions/checkout@v2
 
-    - name: Clean ESM System Environment
-      run: |
-        echo TBD
-        docker rmi -f $(docker images -q)
+      - name: Clean ESM System Environment
+        run: |
+          echo TBD
+          docker rmi -f $(docker images -q)
 
-    - name: Build ESM Docker
-      run: | 
-        chmod +x SecBuzzerESM/prepare.sh
-        ./SecBuzzerESM/prepare.sh
+      - name: Build ESM Docker
+        run: | 
+          chmod +x SecBuzzerESM/prepare.sh
+          ./SecBuzzerESM/prepare.sh
 
-    - name: Call Release
-      if: ${{ github.event.inputs.mergeToReleases == 'true' && github.ref == 'refs/heads/master' }}
-      uses: benc-uk/workflow-dispatch@v1
+      - name: Call Release
+        if: ${{ github.event.inputs.mergeToReleases == 'true' && github.ref == 'refs/heads/master' }}
+        uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: Release
           token: ${{ secrets.REPO_ACCESS_TOKEN }}

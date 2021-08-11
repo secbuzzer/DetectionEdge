@@ -35,6 +35,10 @@ jobs:
           echo "::set-output name=CHECK::true"
           echo "::set-output name=VERSION::"$newVer
 
+      - name: Clean System Docker Images
+        run: |
+          docker rmi -f $(docker images -q)
+
       - name: Build Offline Install
         run: | 
           chmod +x SecBuzzerESM/prepare.sh

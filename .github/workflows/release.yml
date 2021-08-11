@@ -6,7 +6,7 @@ on:
         default: 'false'
 
 jobs:
-  report:
+  release:
     if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: [self-hosted, Linux, X64, dev]
     steps:

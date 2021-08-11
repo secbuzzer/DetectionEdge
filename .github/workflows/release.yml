@@ -61,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
         with:
           tag_name: ${{ steps.ver.outputs.VERSION }}
-          release_name: Release-${{ steps.ver.outputs.VERSION }}
+          release_name: ${{ steps.ver.outputs.VERSION }}
           body: |
             Changes in this Release
             - First Change

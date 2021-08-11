@@ -1,5 +1,4 @@
-# SecBuzzer ESM
-開發中
+# SecBuzzer ESM  
 
 
 ## 版本安裝及說明文件引導

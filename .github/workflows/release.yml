@@ -20,10 +20,10 @@ jobs:
         run: |
           if [ "`git merge origin/development | grep '^Already'`" ]; then
             echo "Master Code Already up-to-date"
-            echo "::set-output name=CHECK::false"
-            exit 0
+          else
+            git ststus
+            git push
           fi
-          git ststus
           newVer=`awk '$0 ~ /# V/{print $2}' SecBuzzerESM/HISTORY.md | awk 'NR==1'`
           nowVer=`git describe --tags $(git rev-list --tags --max-count=1)`
           echo "newVer=>$newVer, nowVer=>$nowVer"
@@ -32,7 +32,6 @@ jobs:
             echo "::set-output name=CHECK::false"
             exit 0
           fi
-          git push
           echo "::set-output name=CHECK::true"
           echo "::set-output name=VERSION::"$newVer
 

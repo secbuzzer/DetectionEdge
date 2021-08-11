@@ -35,20 +35,26 @@ jobs:
           echo "::set-output name=CHECK::true"
           echo "::set-output name=VERSION::"$newVer
 
+      - name: Clean System Docker Images
+        if: ${{ steps.ver.outputs.CHECK == 'true' }}
+        run: |
+          docker rmi -f $(docker images -q)
+
       - name: Build Offline Install
+        if: ${{ steps.ver.outputs.CHECK == 'true' }}
         run: | 
           chmod +x SecBuzzerESM/prepare.sh
           ./SecBuzzerESM/prepare.sh
 
       - name: Packing
-        if: ${{ steps.ver.outputs.CHECK == "true" }}
+        if: ${{ steps.ver.outputs.CHECK == 'true' }}
         run: |
           mkdir -p /Release/${{ steps.ver.outputs.VERSION }}/
           tar zcvf SecBuzzerESM.tgz SecBuzzerESM
           mv SecBuzzerESM.tgz /Release/${{ steps.ver.outputs.VERSION }}/SecBuzzerESM_${{ steps.ver.outputs.VERSION }}.tgz
 
       - name: Release
-        if: ${{ github.event.inputs.releaseEnable == 'true' && steps.ver.outputs.CHECK == "true" }}
+        if: ${{ github.event.inputs.releaseEnable == 'true' && steps.ver.outputs.CHECK == 'true' }}
         id: create_release
         uses: actions/create-release@v1
         env:

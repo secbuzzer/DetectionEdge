@@ -7,6 +7,7 @@ on:
 
 jobs:
   report:
+    if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: [self-hosted, Linux, X64, dev]
     steps:
       - uses: AutoModality/action-clean@v1
@@ -14,40 +15,41 @@ jobs:
         with:
           fetch-depth: 0
 
-    - name: Check version
-      id: ver
-        if [ "`git merge origin/development | grep 'Already up-to-date'`" ]; then
-          echo Already up-to-date
-          echo "::set-output name=CHECK::false"
-          exit 0
-        fi
-        newVer=`awk '$0 ~ /# V/{print $2}' SecBuzzerESM/HISTORY.md | awk 'NR==1'`
-        nowVer=`git describe --tags $(git rev-list --tags --max-count=1)`
-        echo "newVer=>$newVer, nowVer=>$nowVer"
-        if [ $newVer == $nowVer ]; then
-          echo Version Already up-to-date
-          echo "::set-output name=CHECK::false"
-          exit 0
-        fi
-        git push
-        echo "::set-output name=CHECK::true"
-        echo "::set-output name=VERSION::"$newVer
+      - name: Check Version
+        id: ver
+        run: |
+          if [ "`git merge origin/development | grep 'Already up-to-date'`" ]; then
+            echo Already up-to-date
+            echo "::set-output name=CHECK::false"
+            exit 0
+          fi
+          newVer=`awk '$0 ~ /# V/{print $2}' SecBuzzerESM/HISTORY.md | awk 'NR==1'`
+          nowVer=`git describe --tags $(git rev-list --tags --max-count=1)`
+          echo "newVer=>$newVer, nowVer=>$nowVer"
+          if [ $newVer == $nowVer ]; then
+            echo Version Already up-to-date
+            echo "::set-output name=CHECK::false"
+            exit 0
+          fi
+          git push
+          echo "::set-output name=CHECK::true"
+          echo "::set-output name=VERSION::"$newVer
 
-    - name: Build Offline Install
-      run: | 
-        chmod +x SecBuzzerESM/prepare.sh
-        ./SecBuzzerESM/prepare.sh
+      - name: Build Offline Install
+        run: | 
+          chmod +x SecBuzzerESM/prepare.sh
+          ./SecBuzzerESM/prepare.sh
 
-    - name: Packing
-      if ${{ steps.ver.outputs.CHECK == "true" }}
-      run: |
-        mkdir -p /Release/${{ steps.ver.outputs.VERSION }}/
-        tar zcvf SecBuzzerESM.tgz SecBuzzerESM
-        mv SecBuzzerESM.tgz /Release/${{ steps.ver.outputs.VERSION }}/SecBuzzerESM_${GIT_TAG_NAME}.tgz
+      - name: Packing
+        if: ${{ steps.ver.outputs.CHECK == "true" }}
+        run: |
+          mkdir -p /Release/${{ steps.ver.outputs.VERSION }}/
+          tar zcvf SecBuzzerESM.tgz SecBuzzerESM
+          mv SecBuzzerESM.tgz /Release/${{ steps.ver.outputs.VERSION }}/SecBuzzerESM_${GIT_TAG_NAME}.tgz
 
-    - name: Release
-      if: ${{ github.event.inputs.releaseEnable == 'true' && github.ref == 'refs/heads/master' && steps.ver.outputs.CHECK == "true" }}
-      run: |
-        echo e33 TBD
+      - name: Release
+        if: ${{ github.event.inputs.releaseEnable == 'true' && steps.ver.outputs.CHECK == "true" }}
+        run: |
+          echo e33 TBD
 
 

@@ -18,11 +18,11 @@ jobs:
       - name: Check Version
         id: ver
         run: |
-          if [ "`git merge origin/development | grep 'Already up-to-date'`" ]; then
-            echo Already up-to-date
+          if [ "`git merge origin/development | grep '^Already'`" ]; then
             echo "::set-output name=CHECK::false"
             exit 0
           fi
+          git ststus
           newVer=`awk '$0 ~ /# V/{print $2}' SecBuzzerESM/HISTORY.md | awk 'NR==1'`
           nowVer=`git describe --tags $(git rev-list --tags --max-count=1)`
           echo "newVer=>$newVer, nowVer=>$nowVer"

@@ -21,7 +21,7 @@ jobs:
           if [ "`git merge origin/development | grep '^Already'`" ]; then
             echo "Master Code Already up-to-date"
           else
-            git ststus
+            git status
             git push
           fi
           newVer=`awk '$0 ~ /# V/{print $2}' SecBuzzerESM/HISTORY.md | awk 'NR==1'`

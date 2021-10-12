@@ -41,28 +41,6 @@ services:
             timeout: 10s
             retries: 5
 
-    grafana:
-        image: grafana/grafana:6.7.2
-        container_name: grafana
-        ports:
-            - 13000:3000
-        user: "104"
-        environment:
-            - GF_SMTP_ENABLED=$GF_SMTP
-            - GF_SMTP_HOST=$GF_SMTP_HOST
-            - GF_SMTP_USER=$GF_SMTP_USER
-            - GF_SMTP_FROM_ADDRESS=$GF_SMTP_FROM_ADDRESS
-            - GF_SMTP_PASSWORD=$GF_SMTP_PASSWORD
-        volumes:
-            - grafana-storage:/var/lib/grafana
-            - ./grafana_plugins:/var/lib/grafana/plugins
-        networks:
-            - esm
-        restart: unless-stopped
-volumes:
-    grafana-storage:
-        driver: local
-
 networks:
   esm:
     external:

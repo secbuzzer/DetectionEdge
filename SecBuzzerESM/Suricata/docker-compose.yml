@@ -13,7 +13,10 @@ services:
      - NET_RAW
     volumes:
       - $SURICATA_LOG_PATH:/var/log/suricata
-      - ./suricata/rules:/var/lib/suricata/rules
+      - ./suricata/rules:/var/lib/rules
+  #    - ./suricata/rules/it/:/var/lib/rules/it      
+  #    - ./suricata/rules/dtm/:/var/lib/rules/dtm
+  #    - ./suricata/rules/classification.config:/var/lib/rules/classification.config
       - ./suricata/dist/suricata.yaml:/etc/suricata/suricata.yaml
       - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
       - "./suricata/iprep:/etc/suricata/iprep"

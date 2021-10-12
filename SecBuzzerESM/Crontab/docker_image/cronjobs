@@ -5,8 +5,9 @@
 @daily root /bin/bash /scripts/daily.sh >> /var/log/cron.log
 @hourly root /bin/bash /scripts/hourly.sh >> /var/log/cron.log
 @reboot root /usr/bin/python3 -u /scripts/es_setter.py >> /var/log/cron.log
-*/10 * * * * root /usr/bin/python3 -u /scripts/Suricata_updater.py >> /var/log/cron.log
-@hourly root /usr/bin/python3 -u /scripts/Suricata_updater.py >> /var/log/cron.log
 */15 * * * * root /usr/bin/python3 -u /scripts/servicecheck.py >> /var/log/cron.log
 @hourly root /usr/bin/python3 -u /scripts/servicecheck.py >> /var/log/cron.log
-@monthly root /usr/bin/curl 'http://eta_malware:5000/eta_malware/api/train?edge_index=cic-&alert_index=suricata-&malware_index=malware-20201020'
+*/15 * * * * [ "`wc -l /suricata_log/eve`date '+%Y-%m-%d'`.json | awk '{print$1}'`" -gt 50000 ] && > /suricata_log/eve`date '+%Y-%m-%d'`.json
+*/15 * * * * [ "`wc -l /suricata_log/stats.log | awk '{print$1}'`" -gt 50000 ] && > /suricata_log/stats.log
+@reboot root /usr/bin/python3 -u /script/it_updater.py >> /var/log/cron.log;/usr/bin/python3 -u /scripts/dtm_updater.py >> /var/log/cron.log;curl -XPOST --unix-socket /var/run/docker.sock -H "Content-Type: application/json" http://localhost/containers/suricata/restart
+*/30 * * * * root /usr/bin/python3 -u /script/it_updater.py >> /var/log/cron.log;/usr/bin/python3 -u /scripts/dtm_updater.py >> /var/log/cron.log;curl -XPOST --unix-socket /var/run/docker.sock -H "Content-Type: application/json" http://localhost/containers/suricata/restart

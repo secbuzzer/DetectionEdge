@@ -111,7 +111,7 @@ outputs:
       #metadata: no
 
       # include the name of the input pcap file in pcap file processing mode
-      pcap-file: false
+      #pcap-file: false
 
       # Community Flow ID
       # Adds a 'community_id' field to EVE records. These are meant to give
@@ -122,41 +122,41 @@ outputs:
       # to make the id less predictable.
 
       # enable/disable the community id feature.
-      community-id: false
+      #community-id: false
       # Seed value for the ID output. Valid values are 0-65535.
-      community-id-seed: 0
+      #community-id-seed: 0
 
       # HTTP X-Forwarded-For support by adding an extra field or overwriting
       # the source or destination IP address (depending on flow direction)
       # with the one reported in the X-Forwarded-For HTTP header. This is
       # helpful when reviewing alerts for traffic that is being reverse
       # or forward proxied.
-      xff:
-        enabled: yes
+      #xff:
+      #  enabled: yes
         # Two operation modes are available, "extra-data" and "overwrite".
-        mode: extra-data
+        # mode: extra-data
         # Two proxy deployments are supported, "reverse" and "forward". In
         # a "reverse" deployment the IP address used is the last one, in a
         # "forward" deployment the first IP address is used.
-        deployment: reverse
+      #  deployment: reverse
         # Header name where the actual IP address will be reported, if more
         # than one IP address is present, the last IP address will be the
         # one taken into consideration.
-        header: X-Forwarded-For
+        #header: X-Forwarded-For
 
       types:
         - alert:
-            payload: yes             # enable dumping payload in Base64
-            payload-buffer-size: 4kb # max size of payload buffer to output in eve-log
-            payload-printable: yes   # enable dumping payload in printable (lossy) format
+            # payload: yes             # enable dumping payload in Base64
+            # payload-buffer-size: 4kb # max size of payload buffer to output in eve-log
+            # payload-printable: yes   # enable dumping payload in printable (lossy) format
             # packet: yes              # enable dumping of packet (without stream segments)
-            http-body: yes           # enable dumping of http body in Base64
-            http-body-printable: yes # enable dumping of http body in printable format
+            # http-body: yes           # enable dumping of http body in Base64
+            # http-body-printable: yes # enable dumping of http body in printable format
             # metadata: no             # enable inclusion of app layer metadata with alert. Default yes
 
             # Enable the logging of tagged packets for rules using the
             # "tag" keyword.
-            tagged-packets: yes
+            # tagged-packets: yes
         # #- anomaly:
         #     # Anomaly log records describe unexpected conditions such
         #     # as truncated packets, packets with invalid IP/UDP/TCP
@@ -298,8 +298,8 @@ outputs:
         # #- metadata
 
   # deprecated - unified2 alert format for use with Barnyard2
-  - unified2-alert:
-      enabled: no
+  #- unified2-alert:
+      # enabled: no
       # for further options see:
       # https://suricata.readthedocs.io/en/suricata-5.0.0/configuration/suricata-yaml.html#alert-output-for-use-with-barnyard2-unified2-alert
 
@@ -621,7 +621,7 @@ af-packet:
     #use-mmap: yes
     # Lock memory map to avoid it goes to swap. Be careful that over subscribing could lock
     # your system
-    #mmap-locked: yes
+    mmap-locked: yes
     # Use tpacket_v3 capture mode, only active if use-mmap is true
     # Don't use it in IPS or TAP mode as it causes severe latency
     #tpacket-v3: yes
@@ -630,7 +630,7 @@ af-packet:
     # the following value. If you are using flow cluster-type and have really network
     # intensive single-flow you could want to set the ring-size independently of the number
     # of threads:
-    #ring-size: 2048
+    ring-size: 10000
     # Block size is used by tpacket_v3 only. It should set to a value high enough to contain
     # a decent number of packets. Size is in bytes so please consider your MTU. It should be
     # a power of 2 and it must be multiple of page size (usually 4096).
@@ -1038,7 +1038,7 @@ host-mode: auto
 # Number of packets preallocated per thread. The default is 1024. A higher number 
 # will make sure each CPU will be more easily kept busy, but may negatively 
 # impact caching.
-#max-pending-packets: 1024
+max-pending-packets: 4096
 
 # Runmode the engine should use. Please check --list-runmodes to get the available
 # runmodes for each packet acquisition method. Defaults to "autofp" (auto flow pinned
@@ -1181,7 +1181,7 @@ defrag:
 # in bytes.
 
 flow:
-  memcap: 128mb
+  memcap: 256mb
   hash-size: 65536
   prealloc: 10000
   emergency-recovery: 30
@@ -1306,11 +1306,11 @@ flow-timeouts:
 #                               # is used in a rule.
 #
 stream:
-  memcap: 64mb
+  memcap: 512mb
   checksum-validation: yes      # reject wrong csums
   inline: auto                  # auto will use inline mode in IPS mode, yes or no set it statically
   reassembly:
-    memcap: 256mb
+    memcap: 512mb
     depth: 1mb                  # reassemble 1mb into a stream
     toserver-chunk-size: 2560
     toclient-chunk-size: 2560
@@ -1371,7 +1371,7 @@ decoder:
 # If the argument specified is 0, the engine uses an internally defined
 # default limit.  On not specifying a value, we use no limits on the recursion.
 detect:
-  profile: medium
+  profile: high
   custom-values:
     toclient-groups: 3
     toserver-groups: 25
@@ -1812,11 +1812,11 @@ napatech:
 ## file configuration".
 ##
 
-default-rule-path: /var/lib/suricata/rules
+default-rule-path: /var/lib/rules
 rule-files:
- - "*.rules"
-
-classification-file: /var/lib/suricata/rules/classification.config
+ - "it/*.rules"
+ - "dtm/*.rules"
+classification-file: /var/lib/rules/classification.config
 reference-config-file: /etc/suricata/reference.config
 # threshold-file: /etc/suricata/threshold.config
 

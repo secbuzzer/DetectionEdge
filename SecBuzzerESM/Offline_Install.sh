@@ -70,6 +70,7 @@ chmod go-w $BASEDIR/Packetbeat/packetbeat.docker.yml
 
 echo "Disable Swap"
 swapoff -a
+rm -rf /swap.img
 sed -i 's/.*swap.*/#&/' /etc/fstab
 
 gunzip -c $BASEDIR/envimage/SecBuzzerESM.tgz | sudo docker load

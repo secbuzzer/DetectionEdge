@@ -102,9 +102,11 @@ swapoff -a
 rm -rf /swap.img
 sed -i 's/.*swap.*/#&/' /etc/fstab
 
-echo "Set Suricata capture config"
-IF_NAME=$(cat /opt/SecBuzzerESM/SecBuzzerESM.env | grep "^IF_NAME" | awk -F '=' {'print$2'})
-sed -i "s/interface: eth0/interface: $IF_NAME/" /opt/SecBuzzerESM/Suricata/suricata/dist/suricata.yaml
+if grep -q "\- interface\: eth0" /opt/SecBuzzerESM/Suricata/suricata/dist/suricata.yaml; then
+  echo "Set Suricata capture config"
+  IF_NAME=$(cat /opt/SecBuzzerESM/SecBuzzerESM.env | grep "^IF_NAME" | awk -F '=' {'print$2'})
+  sed -i "0,/interface: eth0/{s/interface: eth0/interface: $IF_NAME/}" /opt/SecBuzzerESM/Suricata/suricata/dist/suricata.yaml
+fi
 
 #echo "set monitor agent key"
 

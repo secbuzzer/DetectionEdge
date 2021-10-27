@@ -17,4 +17,6 @@ services:
       API_KEY_VALUE: $API_KEY_VALUE
       ORG_3_CODE: $ORG_3_CODE
       DEV_MODE: ${DEV_MODE:-no}
+      DEBUG_MODE: ${DEBUG_MODE:-no}
+      RUNNING_MODE: 0
     command: "java -jar /EsmEdgeApp.jar" #  -Xmx3g"

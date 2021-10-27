@@ -27,8 +27,8 @@ def str2bool(v):
 def init():
     global RMQ_SERVER
     global HOSTNAME
-    if str2bool(os.getenv('DEV', 'Flase')):
-        RMQ_SERVER = "https://test.api.secbuzzer.co"
+    if str2bool(os.getenv('DEV', 'True')):
+        RMQ_SERVER = "https://test.api.esm.secbuzzer.co"
         print("RUNNING WITH DEV MODE")
     else:
         RMQ_SERVER = "https://api.esm.secbuzzer.co"

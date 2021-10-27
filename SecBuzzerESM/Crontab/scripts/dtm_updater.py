@@ -74,7 +74,7 @@ def downloadRulesAndCheck(version:int, path:str='/tmp/dtm_rules.tgz'):
 if __name__ == "__main__":
     time.sleep(random.randint(0,15))
 
-    if str2bool(os.getenv('DEV', 'Flase')):
+    if str2bool(os.getenv('DEV', 'True')):
         esm_srv_url= "https://test.api.esm.secbuzzer.co"
         print ("Running with DEV MODE")
     else:
@@ -120,7 +120,7 @@ if __name__ == "__main__":
                 print('Restarting Suricata')
                 time.sleep(3)
                 subprocess.call('cat /Suricata_rules/dtm/classification.config /Suricata_rules/it/classification.config | sort | uniq > /Suricata_rules/classification.config',shell=True)
-                # subprocess.call('curl -XPOST --unix-socket /var/run/docker.sock -H "Content-Type: application/json" http://localhost/containers/suricata/restart',shell=True)
+                subprocess.call('curl -XPOST --unix-socket /var/run/docker.sock -H "Content-Type: application/json" http://localhost/containers/suricata/restart',shell=True)
                 subprocess.call('rm /tmp/local_dtm_rules_version 2>/dev/null',shell=True)
                 subprocess.call(f'echo {current_rules_version} > /tmp/local_dtm_rules_version',shell=True)
                 print('Done!')

@@ -66,7 +66,6 @@ mkdir -p /opt/Logs/Fluentd
 mkdir -p /opt/Logs/Buffers
 
 chown 1000 /opt/Logs -R
-#chmod go-w $BASEDIR/Packetbeat/packetbeat.docker.yml
 
 echo "Disable Swap"
 swapoff -a
@@ -77,7 +76,7 @@ gunzip -c $BASEDIR/envimage/SecBuzzerESM.tgz | sudo docker load
 sudo docker network create esm_network 2>/dev/null || true
 
 echo "Set Suricata capture config"
-IF_NAME=$(cat /opt/SecBuzzerESM/SecBuzzerESM.env | grep "^IF_NAME" | awk -F '=' {'print$2'})
-sed -i "s/interface: eth0/interface: $IF_NAME/" /opt/SecBuzzerESM/Suricata/suricata/dist/suricata.yaml
+IF_NAME=$(cat $BASEDIR/SecBuzzerESM.env | grep "^IF_NAME" | awk -F '=' {'print$2'})
+sed -i "s/interface: eth0/interface: $IF_NAME/" $BASEDIR/Suricata/suricata/dist/suricata.yaml
 
 echo "Done!"

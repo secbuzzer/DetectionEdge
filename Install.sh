@@ -72,27 +72,12 @@ root hard nofile 655360
 
 find $BASEDIR -maxdepth 1 -mindepth 1 -type d -exec ln -s ../SecBuzzerESM.env {}/.env \; 2>/dev/null || true
 
-#API_KEY=`cat $BASEDIR/SecBuzzerESM.env | grep API_KEY_VALUE | cut -d = -f 2`
-#if [ -n "$API_KEY" ]
-#then
-#mkdir -p tmp/rules
-#current_rules_version=`curl -X POST "https://api.esm.secbuzzer.co/esmapi/web/file/fileVersion" -d "{'TypeCode': 'it'}" -H "Content-Type: application/json" -H "accept: */*" -H "authorization: $API_KEY" | cut -d : -f 2 | cut -d \" -f 2`
-#curl -o rules.tgz "https://api.esm.secbuzzer.co/esmapi/web/file/download/it/$current_rules_version" -H "accept: */*" -H "authorization: $API_KEY"
-#tar zxvf rules.tgz -C tmp/rules
-#sudo chown 1000:1000 tmp/* -R
-#sudo rsync -r --delete tmp/rules/ Suricata/suricata/rules/
-#rm -rf tmp rules.tgz
-#else
-#echo No API key found,Suricata rules download fail, check SecBuzzerESM.env
-#fi
-
 mkdir -p /opt/Logs/ES/volume/es
 mkdir -p /opt/Logs/Suricata
 mkdir -p /opt/Logs/Fluentd
 mkdir -p /opt/Logs/Buffers
 
 chown 1000 /opt/Logs -R
-#chmod go-w $BASEDIR/Packetbeat/packetbeat.docker.yml
 
 rm -rf envimage
 sudo docker network create esm_network 2>/dev/null || true
@@ -102,33 +87,9 @@ swapoff -a
 rm -rf /swap.img
 sed -i 's/.*swap.*/#&/' /etc/fstab
 
-if grep -q "\- interface\: eth0" /opt/SecBuzzerESM/Suricata/suricata/dist/suricata.yaml; then
+if grep -q "\- interface\: eth0" $BASEDIR/Suricata/suricata/dist/suricata.yaml; then
   echo "Set Suricata capture config"
-  IF_NAME=$(cat /opt/SecBuzzerESM/SecBuzzerESM.env | grep "^IF_NAME" | awk -F '=' {'print$2'})
-  sed -i "0,/interface: eth0/{s/interface: eth0/interface: $IF_NAME/}" /opt/SecBuzzerESM/Suricata/suricata/dist/suricata.yaml
+  IF_NAME=$(cat $BASEDIR/SecBuzzerESM.env | grep "^IF_NAME" | awk -F '=' {'print$2'})
+  sed -i "0,/interface: eth0/{s/interface: eth0/interface: $IF_NAME/}" $BASEDIR/Suricata/suricata/dist/suricata.yaml
 fi
-
-#echo "set monitor agent key"
-
-#apt-get install -y zabbix-agent
-#which zabbix_agentd > /dev/null || (echo "monitor agent install fail"; exit)
-#which openssl > /dev/null || (apt-gat install -y openssl ; which openssl) || (echo "openssl install fail"; exit)
-#pskIdentity=`openssl rand -hex 12` 
-#pskKey=`openssl rand -hex 32 | tee /etc/zabbix/zabbix_agentd.psk`
-
-#ls /etc/zabbix/zabbix_agentd.conf > /dev/null || (echo "setup fail"; exit)
-#sed -i "s/^\(# \|#\|\)StartAgents=.*/StartAgents=0/g" /etc/zabbix/zabbix_agentd.conf
-#sed -i "s/^\(# \|#\|\)ServerActive=.*/ServerActive=host-monitor.secbuzzer.ai:30051/g" /etc/zabbix/zabbix_agentd.conf
-#sed -i "s/^\(# \|#\|\)Hostname=.*/Hostname=`hostname`/g" /etc/zabbix/zabbix_agentd.conf
-#sed -i "s/^\(# \|#\|\)TLSConnect=.*/TLSConnect=psk/g" /etc/zabbix/zabbix_agentd.conf
-#sed -i "s/^\(# \|#\|\)TLSPSKIdentity=.*/TLSPSKIdentity=$pskIdentity/g" /etc/zabbix/zabbix_agentd.conf
-#sed -i "s/^\(# \|#\|\)TLSPSKFile=.*/TLSPSKFile=\/etc\/zabbix\/zabbix_agentd.psk/g" /etc/zabbix/zabbix_agentd.conf
-
-#systemctl enable zabbix-agent
-#systemctl restart zabbix-agent
-
-#egrep "^Hostname=" /etc/zabbix/zabbix_agentd.conf
-#egrep "^TLSPSKIdentity=" /etc/zabbix/zabbix_agentd.conf
-#echo TLSPSKKey=$pskKey
-
 echo "Done!"

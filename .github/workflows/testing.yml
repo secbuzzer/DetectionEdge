@@ -12,6 +12,16 @@ jobs:
     steps:
       - uses: AutoModality/action-clean@v1
       - uses: actions/checkout@v2
+      
+      - name: Clean ESM test System Environment
+        run: |
+          echo TBD
+          docker rmi -f $(docker images -q)
+          sudo rm -rf /opt/*
+
+      - name: Install and testing ESM System 
+        run: |
+          sudo bash /home/user/test.sh
 
       - name: Clean ESM System Environment
         run: |

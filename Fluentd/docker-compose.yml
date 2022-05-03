@@ -1,0 +1,18 @@
+version: '2.1'
+services:
+    fluentd:
+        image: csti/fluentd:v4
+        build:
+            context: "./fluentd_image/"
+            dockerfile: "Dockerfile"
+        volumes:
+            - "$FLUENTD_BUFFER_PATH:/fluentd/Buffers"
+            - "./conf/multiprocess.conf:/fluentd/etc/fluent.conf"
+            - "./conf/in_fluentd.conf:/fluentd/etc/in_fluentd.conf"
+            - "./conf/out_it_fluentd.conf:/fluentd/etc/out_it_fluentd.conf"
+            - "./conf/out_dtm_fluentd.conf:/fluentd/etc/out_dtm_fluentd.conf"
+            - "/usr/share/zoneinfo/ROC:/etc/localtime:ro" 
+            - "$SURICATA_LOG_PATH:/fluentd/suricata/"
+            - "$FLUENTD_LOG_PATH:/var/log/fluentd/"
+        network_mode: host
+        restart: unless-stopped

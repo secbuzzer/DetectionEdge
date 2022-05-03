@@ -1,0 +1,4 @@
+@reboot /exec/control_suricata.sh >> /var/log/suricata/suricata.log
+@reboot /exec/setter_es.sh >> /var/log/suricata/suricata.log
+*/3 * * * * /exec/control_suricata.sh >> /var/log/suricata/suricata.log
+*/1 * * * * /exec/check_suricata.sh >> /var/log/suricata/suricata.log

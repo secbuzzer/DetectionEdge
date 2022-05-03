@@ -1,0 +1,136 @@
+version: "3.3"
+
+services:
+  elasticsearch:
+    image: edge/elasticsearch-oss:v1.0
+    container_name: elasticsearch
+    environment:
+      - node.name=Master
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms$ES_MEM -Xmx$ES_MEM"
+      - "http.cors.allow-origin=*"
+      - "http.cors.enabled=true"
+      - "path.data=/es_data"
+      - "indices.recovery.max_bytes_per_sec=0"
+      - "refresh_interval=30s"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 655360
+        hard: 655360
+    volumes:
+      - $ES_LOG_PATH:/usr/share/elasticsearch/logs
+      - $ES_VOLUME_PATH:/es_data
+    ports:
+      - 19200:9200
+      - 19300:9300 #Java API port
+    networks:
+      - esm
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    restart: unless-stopped
+
+  fluentd:
+    image: edge/fluent-bit:v1.0
+    container_name: fluent-bit
+    volumes:
+      - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
+      - "../config/fluentd-bit/:/fluent-bit/etc"
+      - $FLUENTD_LOG_PATH:/fluent-bit/log
+      - $SURICATA_LOG_PATH:/var/log/suricata/
+    links:
+      - 'elasticsearch:elasticsearch'
+    networks:
+      - esm
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    restart: unless-stopped
+
+  suricata:
+    image: edge/suricata:v1.0
+    container_name: suricata
+    network_mode: "host"
+    depends_on:
+      - "fluentd"
+    env_file:
+      - ../SecBuzzerESM.env
+    cap_add:
+      - NET_ADMIN
+      - SYS_NICE
+      - NET_RAW
+    volumes:
+      - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "../config/suricata/:/etc/suricata/"
+      - "../exec/suricata/:/exec/"
+      - "../config/suricata/jobs:/etc/crontabs/jobs"
+      - $SURICATA_LOG_PATH:/var/log/suricata/
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    restart: unless-stopped
+
+  esm:
+    image: edge/esm:v1.0
+    container_name: esm
+    network_mode: "host"
+    volumes:
+      - ../exec/esm/EsmEdgeApp.jar:/EsmEdgeApp.jar
+      - ../config/esm/location.properties:/location.properties
+      - ../config/esm/version:/.version:ro
+    environment:
+      TZ: Asia/Taipei
+      INTERFACE_NAME: $WEB_IF_NAME
+      API_KEY_VALUE: $API_KEY_VALUE
+      ORG_3_CODE: $ORG_3_CODE
+      DEV_MODE: ${DEV_MODE:-no}
+      DEBUG_MODE: ${DEBUG_MODE:-no}
+      RUNNING_MODE: 0
+    command: "java -jar /EsmEdgeApp.jar"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    restart: unless-stopped
+
+  edge-net:
+    image: edge/edge-net:v1.0
+    container_name: edge-net
+    network_mode: host
+    env_file:
+      - ../SecBuzzerESM.env
+    volumes:
+      - "/etc/hostname:/HOSTNAME:ro"
+      - "../logs/edgeNET:/var/log/edgeNET"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    restart: unless-stopped
+
+networks:
+  esm:
+    name: "esm_network"
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

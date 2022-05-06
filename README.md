@@ -3,7 +3,7 @@
 此專案僅說明相關DetectionEdge。
 ## 版本安裝及說明文件引導
 
-1. 安裝前，可先參考Ｗiki中的[DetectionEdge 硬體規格建議](https://github.com/secbuzzer/DetectionEdge/wiki/DetectionEdge-硬體規格建議)進行環境評估。
+1. 安裝前，可先參考Ｗiki中的[DetectionEdge 硬體規格建議](https://github.com/secbuzzer/DetectionEdge/wiki/DetectionEdge-硬體規格建議)或[DetectionEdge 虛擬機規格建議](https://github.com/secbuzzer/DetectionEdge/wiki/DetectionEdge-虛擬機規格建議)進行環境評估。
 2. 安裝可依照Wiki中的[DetectionEdge 操作說明手冊](https://github.com/secbuzzer/DetectionEdge/wiki/DetectionEdge-操作說明手冊)中的安裝操作說明。
 3. 若曾有安裝過需完整移除可參考[DetectionEdge 操作說明手冊](https://github.com/secbuzzer/DetectionEdge/wiki/DetectionEdge-操作說明手冊)中的移除操作說明。
 4. 若重新安裝可參照Wiki中的[DetectionEdge 操作說明手冊](https://github.com/secbuzzer/DetectionEdge/wiki/DetectionEdge-操作說明手冊)中的重新安裝操作說明
